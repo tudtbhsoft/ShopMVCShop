@@ -71,9 +71,10 @@
 									<label for="password"
 										class="col-md-4 col-form-label text-md-right">Giới
 										tính</label>
-									<div class="col-md-6">
-										<form:input type="text" id="sex" class="form-control"
-											name="sex" path="sex" />
+									<div class="col-md-6" style="padding: 200 0 0 0"><br>
+										<input  type="radio" name="sex" path="sex"  value="Nam" checked> Nam 
+										&emsp;&emsp;<input type="radio" name="sex" path="sex"  value="Nu" checked> Nữ
+										&emsp;&emsp;<input type="radio" name="sex" path="sex"  value="Khac" checked> Khác
 										<form:errors path="sex" cssClass="error" style="color:red" />
 									</div>
 								</div>
