@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +37,9 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@RequestMapping("/registr")
-	public String registr(Map<String, Object> model) {
+	public String registr(Map<String, Object> model, HttpSession session) {
+		session.removeAttribute("username");
+		session.removeAttribute("password");
 		User customer = new User();
 		model.put("registr", customer);
 		return "registr";
@@ -46,39 +50,54 @@ public class UserController {
 			RedirectAttributes redirect) {
 		if (result.hasErrors()) {
 			return "registr";
+		} else {
+			List<User> list = userService.listAll();
+			for (User x : list) {
+				if (user.getUsername().equals(x.getUsername())) {
+					redirect.addFlashAttribute("message", "Tài khoản này đã tồn tại");
+					userService.save(user);
+					return "redirect:/registr";
+				} else {
+					continue;
+				}
+			}
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			redirect.addFlashAttribute("message", "Đăng kí tài khoản thành công");
+			userService.save(user);
+			return "redirect:/login";
 		}
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		redirect.addFlashAttribute("message", "Đăng kí tài khoản thành công");
-		userService.save(user);
-		return "redirect:/login";
 	}
 
 	@RequestMapping("/login")
-	public String login(Map<String, Object> model) {
-		User user = new User();
-		model.put("login", user);
+	public String login() {
 		return "login";
 	}
 
 	@RequestMapping(value = "/checklogin", method = RequestMethod.POST)
-	public String checklogin(User user, ModelMap modelMap, HttpServletRequest request, HttpSession session,
-			RedirectAttributes redirect) {
+	public String checklogin(ModelMap modelMap, @RequestParam("username") String username,
+			@RequestParam("password") String password, HttpSession session) {
 		List<User> list = userService.listAll();
 		for (User x : list) {
-			if (user.getUsername().equals(x.getUsername())) {
-				if (bCryptPasswordEncoder.matches(user.getPassword(), x.getPassword())) {
-					session.setAttribute("name", user.getUsername());
-					return "/index";
+			if (username.equals(x.getUsername())) {
+				if (bCryptPasswordEncoder.matches(password, x.getPassword())) {
+					session.setAttribute("name", username);
+					session.removeAttribute("username");
+					session.removeAttribute("password");
+					return "redirect:/listproduct";
 				} else {
-					redirect.addFlashAttribute("message", "Bạn nhập sai mật khẩu");
-					return "redirect:/login";
+					session.setAttribute("username", username);
+					session.setAttribute("password", username);
+					modelMap.addAttribute("message", "Bạn nhập sai mật khẩu");
+					return "login";
 				}
 			} else {
 				continue;
 			}
 		}
-		redirect.addFlashAttribute("message", "Tài khoản không tồn tại");
-		return "redirect:/login";
+		session.setAttribute("username", username);
+		session.setAttribute("password", username);
+		modelMap.addAttribute("message", "Tài khoản " + username + " không tồn tại");
+		return "login";
 	}
 
 	@RequestMapping("/logout")

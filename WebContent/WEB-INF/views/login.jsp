@@ -27,15 +27,14 @@
 						<div class="card-header">Đăng nhập</div>
 						<div class="card-body">
 							<h4 style="color: red; text-align: center">${message}</h4>
-							<form:form action="checklogin" method="post"
-								modelAttribute="login">
+							<form action="checklogin" method="post">
 								<div class="form-group row">
 									<label for="email_address"
 										class="col-md-4 col-form-label text-md-right">Tên tài
 										khoản</label>
 									<div class="col-md-6">
-										<form:input type="text" id="username" path="username"
-											class="form-control" name="username" />
+										<input type="text"  Name="username" 
+											class="form-control" value="${username}" required  />
 									</div>
 								</div>
 
@@ -43,8 +42,8 @@
 									<label for="password"
 										class="col-md-4 col-form-label text-md-right">Mật khẩu</label>
 									<div class="col-md-6">
-										<form:input type="password" id="password" path="password"
-											class="form-control" name="password" />
+										<input type="password"  Name="password" 
+											class="form-control" value="${password}" required  />
 									</div>
 								</div>
 
@@ -62,7 +61,7 @@
 									<button type="submit" value="Save" class="btn btn-primary">Đăng
 										nhập</button>
 								</div>
-							</form:form>
+							</form>
 						</div>
 
 					</div>

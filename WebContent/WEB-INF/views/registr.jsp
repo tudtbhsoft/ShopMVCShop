@@ -25,6 +25,7 @@
 					<div class="card">
 						<div class="card-header">Đăng kí</div>
 						<div class="card-body">
+						<h4 style="color: red; text-align: center">${message}</h4>
 							<form:form action="saveRegistr" method="post"
 								modelAttribute="registr">
 								<div class="form-group row">

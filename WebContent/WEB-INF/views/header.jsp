@@ -44,6 +44,7 @@
 							href="#">Xin chào ${name}</a></li>
 						<li class="nav-item"><a class="nav-link" href="index">Trang
 								chủ</a></li>
+						<li class="nav-item"><a class="nav-link" href="listproduct">Danh mục điện thoại</a></li>
 						<li class="nav-item"><a class="nav-link" href="logout">Đăng
 								xuất</a></li>
 					</ul>
