@@ -35,7 +35,7 @@ public class ProductService {
 		repo.deleteById(id);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Product> search(String keyword) {
 		return repo.search(keyword);
 	}
