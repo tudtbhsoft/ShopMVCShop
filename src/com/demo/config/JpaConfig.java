@@ -23,11 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class JpaConfig {
 
-	@Bean
-	@Qualifier(value = "entityManager")
-	public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-		return entityManagerFactory.createEntityManager();
-	}
+	
 
 	@Bean
 	public DataSource dataSource() {
